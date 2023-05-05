@@ -10,9 +10,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import QuestionContext from '../context/QuestionDataContext';
 import AddIcon from '@mui/icons-material/Add';
 import SaveExam from '../api/SaveExamApi';
-import Api from '../api/Base';
-
+import OptionsContext from '../context/OptionsDataContext';
 const CreateExam = () => {
+    const {options , tools} = useContext(OptionsContext)
+    const [examPk , setExamPk] = useState('')
     const Theme = useTheme()
     const isSmallScreen =useMediaQuery(Theme.breakpoints.down("sm")) 
     const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ const CreateExam = () => {
 
     
 
-    const {functions } = useContext(QuestionContext)
+    const {Question , functions } = useContext(QuestionContext)
 
     const [subjects , setSubjects ] = useState([])
 
@@ -40,10 +41,11 @@ const CreateExam = () => {
         }   
     , [])
           
+    const SubmitExam = () =>{
 
+    }
     const handelChang = (e) =>{
         const {name , value , type } = e.target
-        console.log(examData)
         setExamData((prev) =>{
         return {
             ...prev , 
@@ -200,9 +202,10 @@ const CreateExam = () => {
   {isSmallScreen ?  <Stack direction='row' justifyContent='center' alignItems='center' spacing={2}  
   divider={<Divider orientation="vertical" flexItem />} 
   sx={{position:"fixed" ,paddingY:"5px",boxShadow: 3 ,width:"90vw",left:0,bottom: "5px",bgcolor:"#fff" ,marginX:'5vw'}}>
-  <Button variant='outlined' endIcon={ <SaveIcon />}  onClick={()=>{SaveExam(examData)}}>حفظ الاختبار </Button>
+  <Button variant='outlined' endIcon={ <SaveIcon />}  onClick={()=>{SaveExam(examData , Question , options)}}>حفظ الاختبار </Button>
 
   <Button variant='outlined' endIcon={ <AddIcon />} onClick={()=>{functions.addQuestion()}}>اضافة سؤال </Button>
+
 
 </Stack> : <SpeedDial
   ariaLabel="SpeedDial controlled open example"

@@ -8,7 +8,6 @@ export const QuestionProvider = ({children}) =>{
     
     const addQuestion = () =>{
         setQuestionData((oldData)=>{
-            console.log(oldData.Question.length-1);
             return {
                     Question   : [...oldData.Question ,
                          {id : oldData.Question[oldData.Question.length-1].id + 1 , question : '' , mark : '' }] ,
@@ -20,7 +19,6 @@ export const QuestionProvider = ({children}) =>{
     }
 
     const deleteQuestion = (id , length)=>{
-        console.log(id , length);
         if (length ===1){
             console.log("most have at least on Question ");
 
@@ -57,14 +55,13 @@ export const QuestionProvider = ({children}) =>{
          
        
 
-        console.log(id , value )
         
         
         }
 
     const [QuestionData ,setQuestionData] = useState({
         Question : [
-        {id : 1 , question : '' , mark : '' , options : [{ id : 1 , option : '' , correct_option : false}] }
+        {id : 1 , question : '' , mark : ''  }
          ], 
          
          functions : { deleteQuestion , addQuestion , changeQuestion }
