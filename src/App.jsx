@@ -4,11 +4,13 @@ import { QuestionProvider } from './context/QuestionDataContext';
 import { OptionsProvider } from './context/OptionsDataContext';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-
+import { AuthProvider } from './context/AuthContext';
 import CreateExam from './components/CreateExam';
 import CreateQuestion from './components/CreateQuestion';
 import ViewExam from './components/ViewExam';
 import RadioButtonsGroup from './components/pl';
+import ResponsiveAppBar from './components/Nav';
+import LogIn from './components/LogIn';
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -23,7 +25,7 @@ function App() {
   return (
       <div>
       
-      
+    <AuthProvider>
     <OptionsProvider>
       <QuestionProvider>
       <ThemeProvider theme={darkTheme}>
@@ -33,7 +35,11 @@ function App() {
         <Router>        
           <Routes>
             <Route path ='/mui' element={<CreateExam/>} />
-            <Route path ='/exam' element={<ViewExam/>} />
+            <Route path ='/exam' element={<ViewExam examId={57}/>} />
+            <Route path ='/nav' element={<ResponsiveAppBar />} />
+            <Route path ='/log' element={<LogIn />} />
+
+
 
           </Routes>
         </Router>
@@ -42,6 +48,7 @@ function App() {
 
       </QuestionProvider>
     </OptionsProvider>
+    </AuthProvider>
       
       
       

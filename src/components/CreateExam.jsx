@@ -11,6 +11,7 @@ import QuestionContext from '../context/QuestionDataContext';
 import AddIcon from '@mui/icons-material/Add';
 import SaveExam from '../api/SaveExamApi';
 import OptionsContext from '../context/OptionsDataContext';
+import CustomContainer from './CustomContainer';
 const CreateExam = () => {
     const {options , tools} = useContext(OptionsContext)
     const [examPk , setExamPk] = useState('')
@@ -35,7 +36,6 @@ const CreateExam = () => {
         const  FetchData = async ()=>{
             const response = await ListSubjects()
             setSubjects(response.data)
-            console.log(subjects);           
         }
         FetchData()
         }   
@@ -55,9 +55,9 @@ const CreateExam = () => {
         } )
     }
   return (<>
-    <Grid container spacing={6} justifyContent="center" alignItems="center"   sx={{mt:"1%" }} >
+    <CustomContainer   sx={{mt:"1%" ,bgcolor:'#eee'}} >
       
-        <Grid item xs={11} sm={8} md={6} xl={4}  >
+        
     
              <Card>   
                 <CardContent>
@@ -191,8 +191,8 @@ const CreateExam = () => {
                     </Grid>
                 </CardContent>
              </Card>
-    </Grid>
-  </Grid>
+  
+  </CustomContainer>
 
 
 

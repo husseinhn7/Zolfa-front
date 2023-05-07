@@ -10,16 +10,16 @@ import shadows from '@mui/material/styles/shadows';
 import RetrieveExam from '../api/RetrieveExam';
 import RetrieveOption from '../api/RetrieveOption';
 import RetrieveQuestions from '../api/RetrieveQuestion';
-const ViewExam = () => {
+const ViewExam = (props) => {
 
   const [examData , setExamData ] = useState([])
   const [questionData , setQuestionData ] = useState([])
   useEffect(()=>{
       const fetchData = async () =>{
-      const res = await RetrieveExam(57)
+      const res = await RetrieveExam(props.examId)
       const data = res.data 
       setExamData(data)
-      const res2 = await RetrieveQuestions(57)
+      const res2 = await RetrieveQuestions(props.examId)
       const data2 = res2.data 
       setQuestionData(data2)
     }
@@ -33,7 +33,7 @@ const ViewExam = () => {
   
 
 
-  const [selectedOption, setSelectedOption] = useState(choices[0]);
+  const [selectedOption, setSelectedOption] = useState('');
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);

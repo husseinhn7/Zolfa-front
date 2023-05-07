@@ -8,7 +8,7 @@ import { useContext } from 'react'
 import QuestionContext from '../context/QuestionDataContext'
 import OptionsContext from '../context/OptionsDataContext'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
+import CustomContainer from './CustomContainer';
 
 const CreateQuestion = () => {
     const {Question , functions } = useContext(QuestionContext)
@@ -22,8 +22,7 @@ const CreateQuestion = () => {
 
     }
   return (
-    <Grid container spacing={6} justifyContent="center" alignItems="center" marginTop="-20px" sx={{paddingBottom : "50px"}}  >
-        <Grid item xs={11} sm={8} md={6} xl={4}  >
+    <CustomContainer  sx={{paddingBottom : "50px" ,bgcolor:'#eee'}}  >
             {Question.map((element , index )=>{
             return   <Card key={index} sx={{marginTop:"20px" , paddingBottom : "30px"}}>
                     <CardContent>
@@ -90,8 +89,7 @@ const CreateQuestion = () => {
                 </Card>
 
             })}
-        </Grid>
-    </Grid>
+    </CustomContainer>
   )
 }
 
