@@ -11,6 +11,7 @@ import ViewExam from './components/ViewExam';
 import RadioButtonsGroup from './components/pl';
 import ResponsiveAppBar from './components/Nav';
 import LogIn from './components/LogIn';
+import PrivetRoute from './utility/PrivateRoute';
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -26,28 +27,28 @@ function App() {
       <div>
       
     <AuthProvider>
-    <OptionsProvider>
-      <QuestionProvider>
-      <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
+      <OptionsProvider>
+        <QuestionProvider>
+          <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
 
 
-        <Router>        
-          <Routes>
-            <Route path ='/mui' element={<CreateExam/>} />
-            <Route path ='/exam' element={<ViewExam examId={57}/>} />
-            <Route path ='/nav' element={<ResponsiveAppBar />} />
-            <Route path ='/log' element={<LogIn />} />
+            <Router>        
+              <Routes>
+                <Route path ='/mui' element={<CreateExam/>} />
+                <Route element={<PrivateRoute />}>
+                  <Route path='test' element={<ViewExam examId={57}/>} /> 
+                </Route>
+                <Route path ='/exam' element={<ViewExam examId={57}/>} />
+                <Route path ='/nav' element={<ResponsiveAppBar />} />
+                <Route path ='/log' element={<LogIn />} />
+              </Routes>
+            </Router>
 
+          </ThemeProvider>
 
-
-          </Routes>
-        </Router>
-
-        </ThemeProvider>
-
-      </QuestionProvider>
-    </OptionsProvider>
+        </QuestionProvider>
+      </OptionsProvider>
     </AuthProvider>
       
       

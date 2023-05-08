@@ -19,7 +19,8 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 const LogIn = () => {
-  const {setUser} = useContext(AuthContext)
+  const {isAuthenticated , isStaff ,setUser} = useContext(AuthContext)
+  const v =useContext(AuthContext)
 
 
   const [open, setOpen] = useState(false);
@@ -47,10 +48,11 @@ const HandelSubmit = (data) =>{
           const status =  response.status
           const token = response.data
           if (status === 200){
-            console.log(response.data)
             setLocalItem('token' , token)
+            console.log(isAuthenticated , isStaff)
             const accessToken = jwtDecode(token.access)
             setUser(true , accessToken.is_staff)
+            console.log(isAuthenticated , isStaff)
           }
         } catch (AxiosError) {
         setError(true)
@@ -142,6 +144,8 @@ const HandelChange = (e) =>{
               
               </Grid>
 
+              
+
               <Grid item xs={12} >
                 <Divider><Chip label="او" /></Divider>
               
@@ -149,7 +153,7 @@ const HandelChange = (e) =>{
               </Grid>
 
               <Grid item xs={12}sx={{display:'flex' , justifyContent:'center'}}  >
-                <Link href='/' underline="none">إنشاء حساب جديد</Link>
+                <Link href='/test' underline="none">إنشاء حساب جديد</Link>
           
               </Grid>
 

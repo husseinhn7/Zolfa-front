@@ -1,6 +1,7 @@
 
 :root {
   background-color: #eee;
+  box-sizing: border-box;
 }
 
 html{

@@ -1,51 +1,67 @@
-import React , {useState ,useEffect  ,createContext} from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { getLocalItem } from "../utility/local";
 import jwtDecode from "jwt-decode";
 
+const AuthContext = createContext("");
 
-const AuthContext = createContext("")
+export default AuthContext;
 
-export default AuthContext
-
-export const AuthProvider = ({ children}) => {
+export const AuthProvider = ({ children }) => {
     
-    useEffect(()=>{ 
-        const token = getLocalItem('token')
-        console.log(token)
-        console.log(token!==null)
-        // console.log(token)
-        if (!!token) {
-            const accessToken = jwtDecode(token.access)
-            console.log('hi form if token is ' , va )
-            setUser(true , accessToken.is_staff)
-        }
-        else {
-            console.log('hi form els')
-        }
+  const setUser = (authentication, staff) => {
+    setValue({
+      isAuthenticated: authentication,
+      isStaff: staff,
+      setUser: setUser,
+    });
+  };
+  const getToken = () => {
+    
+    const token =  getLocalItem("token");
 
+    if (!!token) {
+      const accessToken = jwtDecode(token.access);
+        console.log(accessToken)
+      return { isAuthenticated: true,
+               isStaff: accessToken.is_staff}
+    } else {
+        return { isAuthenticated: false,
+            isStaff: false}
+      
+    }}
 
-    }
-    ,[])
-    const setUser = (authentication , staff ) => {
-         setValue(prev =>{
-            return  {
-                isAuthenticated : authentication ,
-                isStaff : staff,
-                 ...prev , 
-                
-            }
-        
-        })
-    }
 
     
-    const [Value , setValue] = useState({isAuthenticated : false , isStaff : false , setUser})
-    return (
-        <AuthContext.Provider value={Value}>
-            {children}
-        </AuthContext.Provider>
-    )
-
-}
+  const [value, setValue] = useState({
+    isAuthenticated: getToken().isAuthenticated,
+    isStaff: getToken().isStaff,
+    setUser: setUser,
+  });
 
 
+
+
+
+
+//   useEffect(() => {
+    
+//     console.log('value before '  , value)
+//     const token =  getLocalItem("token");
+
+//     if (!!token) {
+//       const accessToken = jwtDecode(token.access);
+//         console.log(accessToken)
+//       setUser(true, accessToken.is_staff);
+//     } else {
+//       setUser(false, false);
+//     }
+
+    
+//   }, []);
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
