@@ -12,8 +12,14 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveExam from '../api/SaveExamApi';
 import OptionsContext from '../context/OptionsDataContext';
 import CustomContainer from './CustomContainer';
+import {schema , questionSchema , optionsSchema} from '../utility/ValidateExamData'
+import { boolean } from 'joi';
+
+
 const CreateExam = () => {
     const {options , tools} = useContext(OptionsContext)
+    const {Question , functions } = useContext(QuestionContext)
+
     const [examPk , setExamPk] = useState('')
     const Theme = useTheme()
     const isSmallScreen =useMediaQuery(Theme.breakpoints.down("sm")) 
@@ -27,8 +33,13 @@ const CreateExam = () => {
       })
 
     
+      const [ examDataErrors , setExamDataErrors ] = useState({
+        title : false , subj : false , start_date : false , end_date : false , exam_duration : false , 
+        final : false , comment : false , final_mark : false
+      })
 
-    const {Question , functions } = useContext(QuestionContext)
+    
+
 
     const [subjects , setSubjects ] = useState([])
 
@@ -40,8 +51,65 @@ const CreateExam = () => {
         FetchData()
         }   
     , [])
+
+        
+const ValidateExamData = (data) => {
+    
+    const result = schema.validate(data);
+    if (result.error) {
+        const key = result.error.details[0].context.key
+       
+        setExamDataErrors((prev) =>{
+            return {
+                ...prev , 
+                [key] : true
+            }
+        })
+
+        return false
+
+        // handle validation error
+      } else {
+        const questionsAreValid = ValidateQuestionData() && ValidateOptionsData()
+        return true && questionsAreValid
+        
+      }   
+    }
+
+    const ValidateQuestionData = () =>{
+        var isValidQuestion = true
+        Question.forEach(element => {
+            if (element.question === ''){
+                functions.setError(element.id , true)
+                isValidQuestion = false
+            }
+           
+        });
+        return isValidQuestion
+
+    }
+
+    const ValidateOptionsData = () =>{
+        var isValidOption = true 
+        options.forEach(element => {
+            if (element.option === ''){
+                tools.setError(element.id , true)
+                isValidOption = false
+            }
+        
+    })
+        
+        return isValidOption
+    }
           
     const SubmitExam = () =>{
+        const isValid = ValidateExamData(examData)
+        if (isValid){
+            SaveExam(examData, Question , options)
+        }
+
+        
+
 
     }
     const handelChang = (e) =>{
@@ -53,6 +121,13 @@ const CreateExam = () => {
 
         }
         } )
+        console.log(examDataErrors)
+        setExamDataErrors((prev)=>{
+            return {
+                ...prev , 
+                [name] : false
+            }
+        })
     }
   return (<>
     <CustomContainer   sx={{mt:"1%" ,bgcolor:'#eee'}} >
@@ -69,21 +144,25 @@ const CreateExam = () => {
                             placeholder='عنوان الاختبار'
                             fullWidth
                             dir='rtl'
+                            error={examDataErrors.title}
                             name= 'title'
                             value={examData.title}
                             onChange={(e)=>{handelChang(e)}}
-
+                            helperText={examDataErrors.title ? 'لا يمكن ان يكون عنوان الاختبار فارغ' : ''}
                             />
                         </Grid>
 
                         <Grid item xs={12}  >
                     
                             <Select
+                                
                                 dir='rtl'
                                 fullWidth
                                 name='subj'
+                                error={examDataErrors.subj}
                                 value={examData.subj}
                                 onChange={(e)=>{handelChang(e)}}
+                                helperText='لا يمكن ان يكون اسم الماده فارغ'
                                 
                                 >
                                 {subjects.map((item , n )=>{
@@ -101,8 +180,9 @@ const CreateExam = () => {
                                 label="تاريخ نهاية الاختبار"
                                 dir='rtl'
                                 lang='ar'
+                                error={examDataErrors.end_date}
                                 type="datetime-local"
-                               
+                                helperText={examDataErrors.end_date ? ' تاريخ غير صالح' :''}
                                 fullWidth
                                 InputLabelProps={{
                                 shrink: true,
@@ -122,7 +202,8 @@ const CreateExam = () => {
                                 label="تاريخ بداية الاختبار"
                                 type="datetime-local"
                                 lang='ar'
-                                
+                                error={examDataErrors.start_date}
+                                helperText={examDataErrors.start_date ? ' تاريخ غير صالح' :''}
                                 InputLabelProps={{
                                 shrink: true,
                                 dir : "rtl"
@@ -144,6 +225,8 @@ const CreateExam = () => {
                                         name='final_mark'
                                         value={examData.final_mark}
                                         onChange={(e)=>{handelChang(e)}}
+                                        error={examDataErrors.final_mark}
+                                        helperText='k'
                                         />
                         </Grid>
 
@@ -159,6 +242,8 @@ const CreateExam = () => {
                                 name='exam_duration'
                                 value={examData.exam_duration}
                                 onChange={(e)=>{handelChang(e)}}
+                                error={ examDataErrors.exam_duration }
+                                helperText='fff'
 
                                 
                                 />
@@ -202,7 +287,7 @@ const CreateExam = () => {
   {isSmallScreen ?  <Stack direction='row' justifyContent='center' alignItems='center' spacing={2}  
   divider={<Divider orientation="vertical" flexItem />} 
   sx={{position:"fixed" ,paddingY:"5px",boxShadow: 3 ,width:"90vw",left:0,bottom: "5px",bgcolor:"#fff" ,marginX:'5vw'}}>
-  <Button variant='outlined' endIcon={ <SaveIcon />}  onClick={()=>{SaveExam(examData , Question , options)}}>حفظ الاختبار </Button>
+  <Button variant='outlined' endIcon={ <SaveIcon />}  onClick={()=>{SubmitExam()}}>حفظ الاختبار </Button>
 
   <Button variant='outlined' endIcon={ <AddIcon />} onClick={()=>{functions.addQuestion()}}>اضافة سؤال </Button>
 
@@ -224,7 +309,7 @@ const CreateExam = () => {
     <SpeedDialAction
       icon={ <SaveIcon />}
       tooltipTitle={'حفظ الاختبار'}
-      onClick={()=>{SaveExam(examData)}}
+      onClick={()=>{SubmitExam()}}
     />
 </SpeedDial>}
  

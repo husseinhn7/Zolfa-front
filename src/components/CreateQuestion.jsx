@@ -29,6 +29,8 @@ const CreateQuestion = () => {
                         <Grid container spacing={2} justifyContent="center" alignItems="center"   dir='rtl' >
                             <Grid item xs={12} >
                                 <TextField 
+                                    error={element.error}
+                                    helperText={element.error ? 'لا يمكن ان يكون رأس السؤال فارغ' : ''}
                                     fullWidth
                                     placeholder='راس السؤال'
                                     name='question'
@@ -48,6 +50,8 @@ const CreateQuestion = () => {
                                 if (op.questionId === element.id) {
                                     return <Grid key={i} item xs={12}>
                                                 <TextField
+                                                    error={op.error}
+                                                    helperText={op.error ? 'لا يمكن ان يكون هذا الاختيار فارغ': '' }
                                                     multiline
                                                     fullWidth  
                                                     size='small' 

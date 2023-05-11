@@ -1,5 +1,5 @@
 import React , {useState , useEffect} from 'react'
-import { Grid , Paper , Button ,Chip, Card ,Divider, CardContent , Typography } from '@mui/material'
+import { Grid , Paper , Button ,Chip, Card ,Divider, CardContent , Typography, CardHeader } from '@mui/material'
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -41,8 +41,9 @@ const ViewExam = (props) => {
   return (
     <Grid container spacing={6} justifyContent="center" alignItems="center"   sx={{mt:"1%" , background:'#eee' }} >
         <Grid item xs={11} sm={8} md={6} xl={4} >
-            <Card sx={{marginY:"5%" }}>
+            <Card sx={{marginY:"5%" , pt:3}}>
             <Grid container spacing={2} justifyContent="center" alignItems="center"   dir='rtl' >
+              
                 <CardContent>
                   <Grid item xs={12} >
                     
@@ -55,7 +56,6 @@ const ViewExam = (props) => {
 
           
             {questionData.map((q,i)=>{
-              console.log(q.question)
 
 
 

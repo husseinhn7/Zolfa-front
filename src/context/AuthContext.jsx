@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     if (!!token) {
       const accessToken = jwtDecode(token.access);
-        console.log(accessToken)
       return { isAuthenticated: true,
                isStaff: accessToken.is_staff}
     } else {

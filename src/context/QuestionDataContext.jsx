@@ -10,7 +10,7 @@ export const QuestionProvider = ({children}) =>{
         setQuestionData((oldData)=>{
             return {
                     Question   : [...oldData.Question ,
-                         {id : oldData.Question[oldData.Question.length-1].id + 1 , question : '' , mark : '' }] ,
+                         {id : oldData.Question[oldData.Question.length-1].id + 1 , question : '' , mark : '' , error : false}] ,
                     functions  : oldData.functions 
             }
         
@@ -46,6 +46,7 @@ export const QuestionProvider = ({children}) =>{
             var list = oldData.Question
             const index = list.findIndex((obj)=>obj.id === id)
             list[index].question = value
+            list[index].error = false
             return {
                 Question : list , 
                 functions : oldData.functions
@@ -53,18 +54,29 @@ export const QuestionProvider = ({children}) =>{
 
         })
          
-       
-
-        
-        
         }
+
+
+    const setError = (id , value)=>{
+        setQuestionData((oldData)=>{
+            var list = oldData.Question
+            const index = list.findIndex((obj)=>obj.id === id)
+            list[index].error = value
+            return {
+                Question : list , 
+                functions : oldData.functions
+            }
+
+        })
+
+    }
 
     const [QuestionData ,setQuestionData] = useState({
         Question : [
-        {id : 1 , question : '' , mark : ''  }
+        {id : 1 , question : '' , mark : '' , error : false }
          ], 
          
-         functions : { deleteQuestion , addQuestion , changeQuestion }
+         functions : { deleteQuestion , addQuestion , changeQuestion , setError }
         }) 
 
 

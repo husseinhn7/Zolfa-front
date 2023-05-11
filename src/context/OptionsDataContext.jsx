@@ -18,7 +18,7 @@ export const OptionsProvider = ({children}) =>{
                  newId += oldData.options[oldData.options.length-1].id + 1
             }
             return {
-                options : [...oldData.options , {questionId : questionI , id : newId , option : '' , correct_option : false }] ,
+                options : [...oldData.options , {questionId : questionI , id : newId , option : '' , correct_option : false , error : false }] ,
                 tools   : oldData.tools
 
             }
@@ -53,6 +53,7 @@ export const OptionsProvider = ({children}) =>{
             var list = oldData.options
             const index = list.findIndex((obj)=>obj.id === id && obj.questionId === questionId)
             list[index].option = value
+            list[index].error = false 
             return {
                 options : list , 
                 tools : oldData.tools
@@ -78,12 +79,24 @@ export const OptionsProvider = ({children}) =>{
 
     }
 
+    const setError = ( id ,  value) =>{
+        setOptionsData((oldData)=>{
+            var list = oldData.options
+            const index = list.findIndex((obj)=>obj.id === id )
+            list[index].error = value
+            return {
+                options : list , 
+                tools : oldData.tools
+            }
+
+        })
+    }
 
 
     const [OptionsData ,setOptionsData] = useState({
-         options : [{ questionId : 1 ,  id : 1 , option : '' , correct_option : false}] , 
+         options : [{ questionId : 1 ,  id : 1 , option : '' , correct_option : false , error : false}] , 
          
-         tools : { deleteOption , addOption , changeOption , CorrectOption}
+         tools : { deleteOption , addOption , changeOption , CorrectOption , setError}
         }) 
 
 

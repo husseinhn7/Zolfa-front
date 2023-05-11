@@ -12,6 +12,11 @@ import RadioButtonsGroup from './components/pl';
 import ResponsiveAppBar from './components/Nav';
 import LogIn from './components/LogIn';
 import PrivetRoute from './utility/PrivateRoute';
+
+import ThemeToggler from './components/ThemeToggler';
+
+
+
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -42,6 +47,8 @@ function App() {
                 <Route path ='/exam' element={<ViewExam examId={57}/>} />
                 <Route path ='/nav' element={<ResponsiveAppBar />} />
                 <Route path ='/log' element={<LogIn />} />
+                <Route path ='/theme' element={<ThemeToggler />} />
+
               </Routes>
             </Router>
 
