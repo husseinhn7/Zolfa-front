@@ -1,6 +1,6 @@
 import Api from "./Base";
 import SaveQuestionApi from "./SaveQuestionApi";
-
+import SendExamLink from "./SendExamLink";
 
 
 
@@ -10,7 +10,7 @@ const SaveExam = (data , questions , options) => {
         if ( res.status === 201 ) {
             const examPk = res.data.pk
             console.log(questions , options)
-
+            SendExamLink(examPk)
             questions.map(question=>{
                 const questionData = {exam : examPk , question : question.question , mark : 9}
                 const optionsData = options.filter( option=>{

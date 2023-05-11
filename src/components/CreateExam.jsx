@@ -12,36 +12,35 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveExam from '../api/SaveExamApi';
 import OptionsContext from '../context/OptionsDataContext';
 import CustomContainer from './CustomContainer';
-import {schema , questionSchema , optionsSchema} from '../utility/ValidateExamData'
-import { boolean } from 'joi';
+import {schema } from '../utility/ValidateExamData'
 
 
 const CreateExam = () => {
     const {options , tools} = useContext(OptionsContext)
     const {Question , functions } = useContext(QuestionContext)
+    const [subjects , setSubjects ] = useState([])
+    const [ examData , setExamData ] = useState({
+        title : '' , subj : '' , start_date : '' , end_date : '' , exam_duration : 1 , 
+        final : false , comment : '' , final_mark : 20
+      })
+    const [ examDataErrors , setExamDataErrors ] = useState({
+        title : false , subj : false , start_date : false , end_date : false , exam_duration : false , 
+        final : false , comment : false , final_mark : false
+      })
 
-    const [examPk , setExamPk] = useState('')
+
+
     const Theme = useTheme()
     const isSmallScreen =useMediaQuery(Theme.breakpoints.down("sm")) 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [ examData , setExamData ] = useState({
-        title : '' , subj : '' , start_date : '' , end_date : '' , exam_duration : 5 , 
-        final : false , comment : '' , final_mark : 20
-      })
-
     
-      const [ examDataErrors , setExamDataErrors ] = useState({
-        title : false , subj : false , start_date : false , end_date : false , exam_duration : false , 
-        final : false , comment : false , final_mark : false
-      })
 
     
 
 
-    const [subjects , setSubjects ] = useState([])
 
     useEffect( ()=>{
         const  FetchData = async ()=>{
@@ -121,7 +120,6 @@ const ValidateExamData = (data) => {
 
         }
         } )
-        console.log(examDataErrors)
         setExamDataErrors((prev)=>{
             return {
                 ...prev , 

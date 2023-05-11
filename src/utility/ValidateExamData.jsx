@@ -14,14 +14,3 @@ export  const schema = Joi.object({
   final_mark: Joi.number().min(0).max(100)
 });
 
-
-export const questionSchema = Joi.object({
-    question :  Joi.string().required(),
-    id : Joi.number() ,
-    mark : Joi.any() , 
-    error : Joi.any() ,
-})
-
-export const optionsSchema = Joi.object({
-    option :  Joi.string().required(),
-})

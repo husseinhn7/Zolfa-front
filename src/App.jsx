@@ -12,7 +12,7 @@ import RadioButtonsGroup from './components/pl';
 import ResponsiveAppBar from './components/Nav';
 import LogIn from './components/LogIn';
 import PrivetRoute from './utility/PrivateRoute';
-
+import ViewExamPage from './pages/ViewExamPage';
 import ThemeToggler from './components/ThemeToggler';
 
 
@@ -44,7 +44,7 @@ function App() {
                 <Route element={<PrivateRoute />}>
                   <Route path='test' element={<ViewExam examId={57}/>} /> 
                 </Route>
-                <Route path ='/exam' element={<ViewExam examId={57}/>} />
+                <Route path ='/exam/:examId' element={<ViewExamPage />} />
                 <Route path ='/nav' element={<ResponsiveAppBar />} />
                 <Route path ='/log' element={<LogIn />} />
                 <Route path ='/theme' element={<ThemeToggler />} />
