@@ -1,4 +1,4 @@
-import React  , {useState , useEffect , useContext} from 'react'
+import React  , {useState , useEffect , useContext , memo} from 'react'
 import { Card , Select ,MenuItem ,Divider ,
          Switch, Stack , CardContent , Grid ,
          TextField , Typography, Button , 
@@ -199,6 +199,7 @@ const ValidateExamData = (data) => {
                                 id="datetime-local"
                                 label="تاريخ بداية الاختبار"
                                 type="datetime-local"
+                                
                                 lang='ar'
                                 error={examDataErrors.start_date}
                                 helperText={examDataErrors.start_date ? ' تاريخ غير صالح' :''}
@@ -315,4 +316,4 @@ const ValidateExamData = (data) => {
   )
 }
 
-export default CreateExam
+export default memo(CreateExam)

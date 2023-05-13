@@ -4,7 +4,7 @@ import { Card , Icon, Button ,
     CardContent , Grid , TextField , 
     InputAdornment, Stack} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useContext } from 'react'
+import { useContext , memo } from 'react'
 import QuestionContext from '../context/QuestionDataContext'
 import OptionsContext from '../context/OptionsDataContext'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -97,4 +97,4 @@ const CreateQuestion = () => {
   )
 }
 
-export default CreateQuestion
+export default memo(CreateQuestion)

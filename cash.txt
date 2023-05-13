@@ -1,0 +1,18 @@
+<RadioGroup value={selectedOption} onChange={(e)=>{handleChange(e , q.question.pk)}}>
+                    <FormControlLabel
+                     
+                      key={choice.option}
+                      value={choice.option}
+                      control={
+                        <Radio
+                        dir='ltr'
+                          
+                          icon={<Chip label={index} variant="outlined" />}
+                          checkedIcon={<DoneIcon />}
+                          lang='ar'
+                        />
+                      }
+                      label={choice.option}
+                      
+                    />
+                    </RadioGroup>

@@ -1,30 +1,33 @@
-import React , {useState , useEffect} from 'react'
-import { Grid , Paper , Button ,Chip, Card ,Divider, CardContent , Typography, CardHeader } from '@mui/material'
+import React , {useState , useEffect , useRef} from 'react'
+import { Grid ,Chip,Button,Alert ,Card ,Divider, CardContent , Typography } from '@mui/material'
 import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import DoneIcon from '@mui/icons-material/Done';
-import shadows from '@mui/material/styles/shadows';
 import RetrieveExam from '../api/RetrieveExam';
-import RetrieveOption from '../api/RetrieveOption';
 import RetrieveQuestions from '../api/RetrieveQuestion';
-const ViewExam = (props) => {
+import AnswerExamApi from '../api/AnswerExamApi';
 
+
+
+
+
+const ViewExam = (props) => {
+  const [error , setError ] = useState({})
   const [examData , setExamData ] = useState([])
   const [questionData , setQuestionData ] = useState([])
+  const [answers , setAnswers] = useState({})
+  
   useEffect(()=>{
       const fetchData = async () =>{
-      const res = await RetrieveExam(props.examId)
-      const data = res.data 
-      setExamData(data)
+       
+      setExamData(props.data)
       const res2 = await RetrieveQuestions(props.examId)
       const data2 = res2.data 
       setQuestionData(data2)
+      console.log(questionData)
     }
 
     fetchData()
+     
   }
     
     
@@ -32,16 +35,53 @@ const ViewExam = (props) => {
     ,[])
   
 
+  const handelSubmitAnswers =  ()=>{
+    var AllQuestionHaveAnswers = true
+    var listOfQuestions = questionData.map((obj)=>{
+      const key = obj.question.pk
+      setError((prev)=> { 
+        return {
+        ...prev ,
+        [key] : false 
+      }})
+      return obj.question.pk
+      })
+    var listOfAnswers = Object.keys(answers).map((key)=>{return parseInt(key)})
+    console.log(listOfAnswers , listOfQuestions)
+      listOfQuestions.forEach((question)=>{
+        if (!listOfAnswers.includes(question)){
+          setError((prev)=>{
+           return { ...prev ,
+            [question] : true}
+          })
+          AllQuestionHaveAnswers = false
+        }
+      })
+      if( AllQuestionHaveAnswers){
+        AnswerExamApi(answers)
+      }
+      
+  }
 
-  const [selectedOption, setSelectedOption] = useState('');
+  const handleChange = (event , questionId) => {
+    setError((prev)=>{
+      return { ...prev ,
+       [questionId] : false}
+     })
 
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
+   
+    setAnswers((prev)=>{
+      return {
+        ...prev , 
+        [questionId] :  parseInt(event.target.value)
+      }
+    })
+
   }
   return (
     <Grid container spacing={6} justifyContent="center" alignItems="center"   sx={{mt:"1%" , background:'#eee' }} >
         <Grid item xs={11} sm={8} md={6} xl={4} >
-            <Card sx={{marginY:"5%" , pt:3}}>
+            <Card sx={{marginY:"5%" , p:2}}>
             <Grid container spacing={2} justifyContent="center" alignItems="center"   dir='rtl' >
               
                 <CardContent>
@@ -49,6 +89,7 @@ const ViewExam = (props) => {
                     
                       <Typography variant='h5'>{examData.title} </Typography>                  
                   </Grid>
+                  
                  
                 </CardContent>
                </Grid>
@@ -61,14 +102,26 @@ const ViewExam = (props) => {
 
 
            
-            return <Card key= {i} sx={{shadows: 4 ,marginY:"5%"}} >
+            return <Card key= {i} sx={{shadows: 4 ,marginY:"5%" }} >
 
                 <CardContent>
                 <Grid container spacing={2} justifyContent="center" alignItems="center"   dir='rtl' >
+
+                  {
+                    error[q.question.pk] ? <Grid item xs={12} >
+                    
+                    <Alert severity="error" >لم تتم الاجابة علي هذا السؤال ! </Alert>             
+                  </Grid> : null
+
+                  }
+
+
                   <Grid item xs={12} >
                     
-                      <Typography variant='h6'>{q.question.question } </Typography>                  
+                      <Typography variant='h6'>{q.question.pk } </Typography>                  
                   </Grid>
+
+                  
 
                   <Grid item xs={12} justifyContent="center" alignItems="center" >
                     <Divider>
@@ -82,36 +135,16 @@ const ViewExam = (props) => {
                   
                   {q.option.map((choice , index) => (
 
-                    <Grid item xs={12} key={index}>
-                    <RadioGroup value={selectedOption} onChange={handleChange}>
-                    <FormControlLabel
-                    dir='rtl'
-                      key={choice.option}
-                      value={choice.option}
-                      control={
-                        <Radio
-                        dir='ltr'
-                          sx={{
-                            '&.Mui-checked': {
-                              color: '#4caf50',
-                            },
-                            alignSelf:'flex-start',
-                            '&.Mui-checked .MuiSvgIcon-root': {
-                              display: 'block',
-                            },
-                          }}
-                          icon={<Chip label={index} variant="outlined" />}
-                          checkedIcon={<DoneIcon />}
-                          lang='ar'
-                        />
-                      }
-                      label={choice.option}
-                      sx={{ border : selectedOption === choice ? '1px solid green' : '0px',
-                      marginX : "0px", width:"100%" ,borderRadius:"5px"}}
-                    />
-                    </RadioGroup>
+                    <Grid item xs={12} key={index} >
+                    <FormControlLabel 
+                    sx={{width:'100%' }}   
+                    checked={answers[`${q.question.pk}`] === choice.pk}
+                    onChange={(e)=>handleChange(e,q.question.pk)}
+                    control={<Radio sx={{alignSelf:'flex-start' }}/>} value={choice.pk}
+                    label={choice.pk}
+                    
+                    > </FormControlLabel>
                    </Grid>
-                  
                    
                    ))}
                  
@@ -126,6 +159,10 @@ const ViewExam = (props) => {
                 </CardContent>
                 
             </Card>  })}
+                      <Button  onClick={()=>console.log(answers)}   >fffff</Button>
+                      <Button  onClick={()=>console.log(questionData)}   >fffff</Button>
+                      <Button variant='outlined'  onClick={()=>AnswerExamApi(answers)}   >send </Button>
+                      <Button variant='outlined'  onClick={()=>handelSubmitAnswers()}   >print </Button>
 
         </Grid>
     </Grid>

@@ -1,4 +1,4 @@
-import React , {useState  ,createContext} from "react";
+import React , {useState  ,createContext ,useMemo , useCallback} from "react";
 
 const QuestionContext = createContext("")
 
@@ -6,7 +6,7 @@ export default QuestionContext
 
 export const QuestionProvider = ({children}) =>{
     
-    const addQuestion = () =>{
+    const addQuestion = useCallback(() =>{
         setQuestionData((oldData)=>{
             return {
                     Question   : [...oldData.Question ,
@@ -16,9 +16,9 @@ export const QuestionProvider = ({children}) =>{
         
         })
 
-    }
+    } , [])
 
-    const deleteQuestion = (id , length)=>{
+    const deleteQuestion = useCallback( (id , length)=>{
         if (length ===1){
             console.log("most have at least on Question ");
 
@@ -37,11 +37,11 @@ export const QuestionProvider = ({children}) =>{
         })
         }
 
-    }
+    },[])
 
     
 
-    const changeQuestion = (id , value ) =>{
+    const changeQuestion = useCallback ((id , value ) =>{
         setQuestionData((oldData)=>{
             var list = oldData.Question
             const index = list.findIndex((obj)=>obj.id === id)
@@ -54,10 +54,10 @@ export const QuestionProvider = ({children}) =>{
 
         })
          
-        }
+        } , [] )
 
 
-    const setError = (id , value)=>{
+    const setError = useCallback( (id , value)=>{
         setQuestionData((oldData)=>{
             var list = oldData.Question
             const index = list.findIndex((obj)=>obj.id === id)
@@ -69,7 +69,7 @@ export const QuestionProvider = ({children}) =>{
 
         })
 
-    }
+    } , [] )
 
     const [QuestionData ,setQuestionData] = useState({
         Question : [
@@ -80,7 +80,7 @@ export const QuestionProvider = ({children}) =>{
         }) 
 
 
-    return <QuestionContext.Provider value={QuestionData}>
+    return <QuestionContext.Provider value={useMemo(()=>QuestionData)}>
 
             {children}
     
