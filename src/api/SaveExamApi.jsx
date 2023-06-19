@@ -1,11 +1,12 @@
 import Api from "./Base";
 import SaveQuestionApi from "./SaveQuestionApi";
 import SendExamLink from "./SendExamLink";
+import { getUserId } from "../utility/local";
 
 
 
 const SaveExam = (data , questions , options) => {
-    Api.post('http://192.168.1.8:8000/exams/create-exam/' , data )
+    Api.post('exams/create-exam/' , {exam_creator : getUserId() , ...data} )
     .then(res=>{
         if ( res.status === 201 ) {
             const examPk = res.data.pk

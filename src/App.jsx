@@ -1,21 +1,21 @@
 import PrivateRoute   from './utility/PrivateRoute'
 import {BrowserRouter as Router , Routes , Route } from 'react-router-dom'
-import { QuestionProvider } from './context/QuestionDataContext';
-import { OptionsProvider } from './context/OptionsDataContext';
+import ExamDataProvider from './utility/ExamDataProvider';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AuthProvider } from './context/AuthContext';
-import CreateExam from './components/CreateExam';
-import CreateQuestion from './components/CreateQuestion';
 import ViewExam from './components/ViewExam';
 import RadioButtonsGroup from './components/pl';
-import ResponsiveAppBar from './components/Nav';
+import LandingNav from './components/LandingNav';
 import LogIn from './components/LogIn';
 import PrivetRoute from './utility/PrivateRoute';
 import ViewExamPage from './pages/ViewExamPage';
 import ThemeToggler from './components/ThemeToggler';
-
-
+import CreateExamPage from './pages/CreateExamPage';
+import AuthenticatedRoute from './routes/AuthenticatedRoute';
+import SideNave from './components/SideNave';
+import MainNav from './components/MainNav'
+import AddIntake from './components/AddIntake';
 
 const darkTheme = createTheme({
   palette: {
@@ -32,30 +32,48 @@ function App() {
       <div>
       
     <AuthProvider>
-      <OptionsProvider>
-        <QuestionProvider>
+      
           <ThemeProvider theme={darkTheme}>
           <CssBaseline />
 
 
             <Router>        
               <Routes>
-                <Route path ='/mui' element={<CreateExam/>} />
+                <Route element={ <AuthenticatedRoute /> }>
+                  
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                </Route>
                 <Route element={<PrivateRoute />}>
-                  <Route path='test' element={<ViewExam examId={57}/>} /> 
+                  <Route path='test/:examId' element={<ViewExamPage />} /> 
                 </Route>
                 <Route path ='/exam/:examId' element={<ViewExamPage />} />
-                <Route path ='/nav' element={<ResponsiveAppBar />} />
+                
+                <Route element={<ExamDataProvider /> }>
+                  <Route path ='/create-exam/' element={<CreateExamPage />} />
+                </Route>
+                
+                <Route path ='/nav' element={<LandingNav />} />
                 <Route path ='/log' element={<LogIn />} />
-                <Route path ='/theme' element={<ThemeToggler />} />
+                <Route path ='/theme' element={<SideNave />} />
+                <Route path ='/main' element={<AddIntake/>} />
 
               </Routes>
             </Router>
 
           </ThemeProvider>
 
-        </QuestionProvider>
-      </OptionsProvider>
+       
     </AuthProvider>
       
       

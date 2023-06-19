@@ -4,90 +4,65 @@ import { Card , Icon, Button ,
     CardContent , Grid , TextField , 
     InputAdornment, Stack} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useContext , memo } from 'react'
+import { useContext ,memo , useMemo } from 'react'
 import QuestionContext from '../context/QuestionDataContext'
 import OptionsContext from '../context/OptionsDataContext'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CustomContainer from './CustomContainer';
-
+import Demo from './Demo';
+import CreateOption from './CreateOption'; 
+import AddButton from './AddButton';
 const CreateQuestion = () => {
     const {Question , functions } = useContext(QuestionContext)
     const {options , tools } = useContext(OptionsContext)
     const handelDeleteQuestion = (id) =>{
       if (Question.length === 1){
-        return <Alert />
+        window.alert('يجب ان يحتوي الاختبار علي سؤال واحد علي الأقل')
       }
-      functions.deleteQuestion(id , Question.length)
-      tools.deleteOption(id , 'q')
-
+      else {
+        functions.deleteQuestion(id , Question.length)
+      }
     }
+
   return (
     <CustomContainer  sx={{paddingBottom : "50px" ,bgcolor:'#eee'}}  >
             {Question.map((element , index )=>{
             return   <Card key={index} sx={{marginTop:"20px" , paddingBottom : "30px"}}>
                     <CardContent>
                         <Grid container spacing={2} justifyContent="center" alignItems="center"   dir='rtl' >
-                            <Grid item xs={12} >
-                                <TextField 
-                                    error={element.error}
-                                    helperText={element.error ? 'لا يمكن ان يكون رأس السؤال فارغ' : ''}
-                                    fullWidth
-                                    placeholder='راس السؤال'
-                                    name='question'
-                                    value={element.question} 
-                                    onChange={(e)=>{functions.changeQuestion(element.id , e.target.value)}}
-
-                                /> 
-                                
-                                </Grid>
-                                <Grid item xs={12} justifyContent="center" alignItems="center" >
-                                    <Divider>
-                                        <Chip label="الاختيارات" />
-                                    </Divider>
-                                </Grid>
+                            
+                            <Demo 
+                            id = {element.id}
+                            error = {element.error}
+                            question = {element.question}
+                            changeQuestion = {functions.changeQuestion}
+                            handelDeleteQuestion = {handelDeleteQuestion}
+                            
+                            
+                            />
 
                             {options.map((op , i )=>{
                                 if (op.questionId === element.id) {
-                                    return <Grid key={i} item xs={12}>
-                                                <TextField
-                                                    error={op.error}
-                                                    helperText={op.error ? 'لا يمكن ان يكون هذا الاختيار فارغ': '' }
-                                                    multiline
-                                                    fullWidth  
-                                                    size='small' 
-                                                    id="fullWidth"
-                                                    name = 'option'
-                                                    value = {op.option} 
-                                                    onChange = { e=>{tools.changeOption(op.id , element.id,e.target.value)}}
-                                                    InputProps={{
-                                                    style : {paddingLeft : 0 , 
-                                                            paddingRight : 0 } , 
-                                                    endAdornment:   <InputAdornment position="end"> 
-                                                                      <Radio  
-                                                                        value={true}
-                                                                        checked= {op.correct_option === true }
-                                                                        name = {`${element.id}`} 
-                                                                        onChange={(e)=>{tools.CorrectOption(op.id , element.id,e.target.checked)}}
-                                                                      />
-                                                                    </InputAdornment>,
-
-                                                    startAdornment: <InputAdornment position="start">
-                                                                        <IconButton aria-label="delete" 
-                                                                            onClick={()=>{tools.deleteOption(op.id , 'o')}}
-                                                                        >
-                                                                    <DeleteIcon />
-                                                    </IconButton></InputAdornment>
-                                                    }}    
-                                                />  
-                                            </Grid>
-
+                                    return <CreateOption
+                                            key={i}
+                                            id ={op.id}
+                                            error ={op.error}
+                                            option ={op.option}
+                                            questionId  = {element.id}
+                                            isCorrectOption = {op.correct_option}
+                                            CorrectOption ={tools.CorrectOption}
+                                            deleteOption ={tools.deleteOption}
+                                            changeOption={tools.changeOption}/>
+                                               
                         }})}
 
-                        <Grid item xs={2} alignContent='center' justifyContent="center" alignItems="center">
-                            <Stack justifyContent="center" alignItems="center">
-                                <IconButton xs={{ width : '100%'}}  variant='outlined' size='small' onClick={()=>{tools.addOption(element.id)}} ><Icon> <AddCircleOutlineIcon/> </Icon> </IconButton>
-                            </Stack>
-                        </Grid>
+                         <AddButton 
+                         id = {element.id}
+                         addOption = {tools.addOption}
+                         
+                         
+                         
+                         />
                         </Grid>
                     </CardContent>              
                 </Card>

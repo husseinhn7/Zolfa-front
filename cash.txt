@@ -16,3 +16,28 @@
                       
                     />
                     </RadioGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+
+`
+<CreateOption
+    key={i}
+    id ={op.id}
+    error ={op.error}
+    option ={op.option}
+    questionId  = {element.id}
+    isCorrectOption = {op.correct_option}
+    CorrectOption ={tools.CorrectOption}
+    deleteOption ={tools.deleteOption}
+    changeOption={tools.changeOption}/>
+`

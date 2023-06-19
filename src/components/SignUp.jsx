@@ -137,14 +137,12 @@ sendData()
             <FormControl>
               <RadioGroup
                 row
-                aria-labelledby="demo-row-radio-buttons-group-label"
                 name="row-radio-buttons-group"
                 width='%100'
                 dir='rtl'
               >
                 <FormControlLabel name='gender' onChange={(e)=>{HandelChange(e)}} value="ذكر" control={<Radio />} label="ذكر" />
                 <FormControlLabel name='gender' onChange={(e)=>{HandelChange(e)}} value="اُنثى" control={<Radio />} label="اُنثى" />
-                <FormControlLabel name='gender' onChange={(e)=>{HandelChange(e)}} value="اخري" control={<Radio />} label="اخري" />
                 
               </RadioGroup>
             </FormControl>
@@ -251,10 +249,10 @@ sendData()
 
         <Grid item xs={12} md={4} >
           <Button 
-            variant='outlined' 
+          variant='contained' 
             sx={{width:'100%'}}
             onClick={()=>{HandelSubmit(data)}}
-            >تسجيل الدخول </Button>
+            >إنشاء الحساب</Button>
       
         </Grid>
 

@@ -6,11 +6,13 @@ export default QuestionContext
 
 export const QuestionProvider = ({children}) =>{
     
-    const addQuestion = useCallback(() =>{
+    const addQuestion = useCallback((addOption) =>{
         setQuestionData((oldData)=>{
+            const questionId = oldData.Question[oldData.Question.length-1].id + 1
+            addOption(questionId)
             return {
                     Question   : [...oldData.Question ,
-                         {id : oldData.Question[oldData.Question.length-1].id + 1 , question : '' , mark : '' , error : false}] ,
+                         {id : questionId , question : '' , mark : '' , error : false}] ,
                     functions  : oldData.functions 
             }
         

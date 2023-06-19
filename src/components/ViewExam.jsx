@@ -3,6 +3,7 @@ import { Grid ,Chip,Button,Alert ,Card ,Divider, CardContent , Typography } from
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RetrieveExam from '../api/RetrieveExam';
+import { getUserId } from '../utility/local';
 import RetrieveQuestions from '../api/RetrieveQuestion';
 import AnswerExamApi from '../api/AnswerExamApi';
 
@@ -58,7 +59,8 @@ const ViewExam = (props) => {
         }
       })
       if( AllQuestionHaveAnswers){
-        AnswerExamApi(answers)
+        console.log(props.examId)
+        AnswerExamApi(answers , props.examId , props.markId)
       }
       
   }
@@ -118,7 +120,7 @@ const ViewExam = (props) => {
 
                   <Grid item xs={12} >
                     
-                      <Typography variant='h6'>{q.question.pk } </Typography>                  
+                      <Typography variant='h6'>{q.question.question } </Typography>                  
                   </Grid>
 
                   
@@ -141,7 +143,7 @@ const ViewExam = (props) => {
                     checked={answers[`${q.question.pk}`] === choice.pk}
                     onChange={(e)=>handleChange(e,q.question.pk)}
                     control={<Radio sx={{alignSelf:'flex-start' }}/>} value={choice.pk}
-                    label={choice.pk}
+                    label={choice.option}
                     
                     > </FormControlLabel>
                    </Grid>

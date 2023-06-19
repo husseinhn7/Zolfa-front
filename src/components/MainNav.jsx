@@ -1,6 +1,7 @@
 import  React , {useState , forwardRef} from 'react';
 // import logo from '../images/light-zolfa-removebg.png'
 import AppBar from '@mui/material/AppBar';
+import Zolfa from '../images/light-zolfa-removebg.png'
 import {Link}  from 'react-router-dom'
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
@@ -16,6 +17,7 @@ import Button from '@mui/material/Button';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
 import SignUp from './SignUp';
+import SideNave from './SideNave';
 
 
 import LogIn from './LogIn';
@@ -31,7 +33,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 function ResponsiveAppBar() {
   const [openDialog, setOpenDialog] = useState(false);
   const [anchor, setAnchor] = useState(null);
-  const open = Boolean(anchor);
+  const [open , setOpen ] = useState(false);
 
 
   const [login , setLogin ] = useState(true)
@@ -45,69 +47,36 @@ function ResponsiveAppBar() {
   };
 
 
-  const handleOpen = (event) => {
-    setAnchor(event.currentTarget);
-  };
- 
-  const handleClose = () => {
-    setAnchor(null);
-  };
+  
 
  
 
   return (
-    <AppBar position="static" sx={{bgcolor:"#fff"}}>
-      <Container maxWidth="lg">
+    <AppBar position="fixed" sx={{bgcolor:"#fff"}}>
+     
+      <Container maxWidth="lg" sx={{bgcolor:"#0000"}}>
+     
         <Toolbar disableGutters>
-        <IconButton
-        sx={{color:"#000", mr : 1 , display:{md:'none'}}}
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-      >
-        <MenuIcon/>
-      </IconButton>
+        
+      <a href='/nav/' style={{display:'flex' , alignItems:"center" , justifyContent:"center"}}>
+      <img src={Zolfa} alt=""  width='50px' height='50px'/>
+    </a>
           
             
             <Box sx={{flexGrow:1}}>
             
             </Box>
 
-            <Stack  
-              direction='row' 
-              divider={<Divider orientation="vertical" flexItem /> }
-              spacing={1} 
-              sx={{display :{ xs : 'none' ,   md:'flex'}}}>
-              <Button  variant='contained' size='small' onClick={()=>handleClickOpenDialog(true)}>تسجيل الدخول</Button>
-              <Button  variant='contained' size='small' onClick={()=>handleClickOpenDialog(false)}>sdj</Button>
-              
             
-            </Stack>
-            <IconButton
-            sx={{color:"#000" , display:{md:'none'}}}
+            <MenuIcon
+            sx={{color:"#000" }}
 
             size="large"
-            aria-label="display more actions"
             edge="end"
             color="inherit"
-            onClick={handleOpen}>
-            <MoreIcon />
-            </IconButton>
-            <Menu
-                anchorEl={anchor}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}>
-
-              <MenuItem onClick={()=>{handleClose() , handleClickOpenDialog() }}>log in </MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
-    
-            </Menu> 
+            onClick={()=>setOpen(true)}>
+            </MenuIcon>
+            <SideNave open={open} anchor='right'  onClose={()=>setOpen(false)} />
 
 
 {

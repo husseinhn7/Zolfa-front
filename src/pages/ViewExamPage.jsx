@@ -4,11 +4,12 @@ import ViewExam from '../components/ViewExam'
 import RetrieveExam from '../api/RetrieveExam'
 import { Dialog , DialogActions,DialogTitle ,DialogContentText, Button ,DialogContent } from '@mui/material'
 import StartExamApi from '../api/StartExamApi'
+import { getUserId } from '../utility/local'
 import GetStudentMarkApi from '../api/GetStudentMarkApi'
 
 const ViewExamPage = () => {
     const [isExamAvailable , setIsExamAvailable] = useState(true)
-
+    const [markId , setMarkId ] = useState(0)
     const [open , setOpen] = useState(true)
     const { examId } = useParams()
     const [examData , setExamData] = useState({})
@@ -24,18 +25,16 @@ const ViewExamPage = () => {
         const currentDate = new Date()
         if (examDate.getTime()  <  currentDate.getTime) {
           setIsExamAvailable(false)
-
         }
 
 
 
 
 
-      const mark = await GetStudentMarkApi(1,examId)
+      const mark = await StartExamApi(getUserId(),examId)
       const markState = mark.data
-      if (markState.status !== true ){
-        setIsExamAvailable(false)
-      }
+      markState.status ? setMarkId(markState.id) : setIsExamAvailable(false)
+      
       
         }
         fetchData()
@@ -48,7 +47,7 @@ const ViewExamPage = () => {
 
     const handelTakeExam = () =>{
       setOpen(false)
-      StartExamApi(examId)
+      
 
     }
 
@@ -77,7 +76,7 @@ const ViewExamPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    {!open ? <ViewExam examId={examId} data= {examData} /> : null}
+    {!open ? <ViewExam examId={examId} data= {examData} markId = {markId}/> : null}
     
     
     </>

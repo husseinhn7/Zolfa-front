@@ -3,7 +3,7 @@ import SaveOptionApi from './SaveOptionApi'
 
 
 const SaveQuestionApi = (data , options) => {
-    Api.post('http://192.168.1.8:8000/exams/create-question/' , data)
+    Api.post('exams/create-question/' , data)
     .then(res=>{
       if (res.status === 201){
         console.log(res.data)
